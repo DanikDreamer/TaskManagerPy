@@ -27,7 +27,11 @@ class Task(models.Model):
         User, related_name="authored_tasks", on_delete=models.CASCADE
     )
     assignee = models.ForeignKey(
-        User, related_name="assigned_tasks", on_delete=models.CASCADE
+        User,
+        related_name="assigned_tasks",
+        null=True,
+        blank=True,
+        on_delete=models.CASCADE,
     )
     state = models.CharField(
         max_length=255, default=States.NEW_TASK, choices=States.choices
