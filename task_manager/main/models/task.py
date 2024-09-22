@@ -24,7 +24,11 @@ class Task(models.Model):
     updated_at = models.DateField(auto_now=True)
     expired_at = models.DateField(null=True, blank=True)
     author = models.ForeignKey(
-        User, related_name="authored_tasks", on_delete=models.CASCADE
+        User,
+        related_name="authored_tasks",
+        null=True,
+        blank=True,
+        on_delete=models.CASCADE,
     )
     assignee = models.ForeignKey(
         User,
