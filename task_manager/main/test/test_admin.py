@@ -4,7 +4,6 @@ from typing import Type, Container
 from django.db import models
 from django.urls import reverse
 from rest_framework.test import APIClient, APITestCase
-from django.test import Client
 
 from task_manager.main.models import Tag, Task, User
 
