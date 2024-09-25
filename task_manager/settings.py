@@ -41,7 +41,13 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "task_manager.main",
+    "rest_framework",
+    "django_filters",
 ]
+
+REST_FRAMEWORK = {
+    "DEFAULT_FILTER_BACKENDS": ["django_filters.rest_framework.DjangoFilterBackend"],
+}
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
