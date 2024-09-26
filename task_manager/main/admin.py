@@ -1,8 +1,6 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
-from .models import User
-from .models import Tag
-from .models import Task
+from .models import User, Tag, Task
 
 
 class TaskManagerAdminSite(admin.AdminSite):
