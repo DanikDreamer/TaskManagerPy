@@ -1,5 +1,6 @@
 from django.db import models
 from .user import User
+from .tag import Tag
 
 
 class Task(models.Model):
@@ -37,6 +38,7 @@ class Task(models.Model):
         blank=True,
         on_delete=models.CASCADE,
     )
+    tags = models.ManyToManyField(Tag, related_name="tasks", blank=True)
     state = models.CharField(
         max_length=255, default=States.NEW_TASK, choices=States.choices
     )
