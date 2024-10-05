@@ -17,6 +17,12 @@ class UserFactory(factory.django.DjangoModelFactory):
     email = factory.LazyAttribute(lambda _: faker.email())
     date_of_birth = factory.LazyAttribute(lambda _: faker.date())
     phone = factory.LazyAttribute(lambda _: faker.phone_number()[:20])
+    password = factory.PostGenerationMethodCall("set_password", "password")
+
+    @classmethod
+    def _after_postgeneration(cls, obj, create, results=None):
+        if create:
+            obj.save()
 
 
 class AdminFactory(factory.django.DjangoModelFactory):

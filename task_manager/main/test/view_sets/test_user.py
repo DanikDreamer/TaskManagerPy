@@ -1,5 +1,3 @@
-import factory
-
 from base import TestViewSetBase
 from factories import UserFactory, AdminFactory
 
@@ -24,15 +22,31 @@ class TestUserViewSet(TestViewSetBase):
         assert user.username == response["username"]
 
     def test_create(self):
-        user_attributes = factory.build(dict, FACTORY_CLASS=UserFactory)
+        user_attributes = UserFactory.build()
+        user_data = {
+            "username": user_attributes.username,
+            "first_name": user_attributes.first_name,
+            "last_name": user_attributes.last_name,
+            "email": user_attributes.email,
+            "date_of_birth": user_attributes.date_of_birth,
+            "phone": user_attributes.phone,
+        }
 
-        self.create(user_attributes)
+        self.create(user_data)
 
     def test_update(self):
         user = UserFactory()
-        new_user_attributes = factory.build(dict, FACTORY_CLASS=UserFactory)
+        new_user_attributes = UserFactory.build()
+        new_user_data = {
+            "username": new_user_attributes.username,
+            "first_name": new_user_attributes.first_name,
+            "last_name": new_user_attributes.last_name,
+            "email": new_user_attributes.email,
+            "date_of_birth": new_user_attributes.date_of_birth,
+            "phone": new_user_attributes.phone,
+        }
 
-        self.update(user.id, new_user_attributes)
+        self.update(user.id, new_user_data)
 
     def test_delete(self):
         user = UserFactory()
@@ -55,15 +69,31 @@ class TestUserNoAuthViewSet(TestViewSetBase):
         self.retrieve(user.id)
 
     def test_create(self):
-        user_attributes = factory.build(dict, FACTORY_CLASS=UserFactory)
+        user_attributes = UserFactory.build()
+        user_data = {
+            "username": user_attributes.username,
+            "first_name": user_attributes.first_name,
+            "last_name": user_attributes.last_name,
+            "email": user_attributes.email,
+            "date_of_birth": user_attributes.date_of_birth,
+            "phone": user_attributes.phone,
+        }
 
-        self.create(user_attributes)
+        self.create(user_data)
 
     def test_update(self):
         user = UserFactory()
-        new_user_attributes = factory.build(dict, FACTORY_CLASS=UserFactory)
+        new_user_attributes = UserFactory.build()
+        new_user_data = {
+            "username": new_user_attributes.username,
+            "first_name": new_user_attributes.first_name,
+            "last_name": new_user_attributes.last_name,
+            "email": new_user_attributes.email,
+            "date_of_birth": new_user_attributes.date_of_birth,
+            "phone": new_user_attributes.phone,
+        }
 
-        self.update(user.id, new_user_attributes)
+        self.update(user.id, new_user_data)
 
     def test_delete(self):
         user = UserFactory()
