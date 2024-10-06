@@ -15,6 +15,7 @@ faker = "^30.0.0"
 djangorestframework-simplejwt = "^5.3.1"
 factory-boy = "^3.3.1"
 coveralls = "^4.0.1"
+rollbar = "^1.0.0"
 
 [tool.poetry.dev-dependencies]
 
