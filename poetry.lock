@@ -518,6 +518,43 @@ files = [
 ]
 
 [[package]]
+name = "newrelic"
+version = "10.0.0"
+description = "New Relic Python Agent"
+optional = false
+python-versions = ">=3.7"
+files = [
+    {file = "newrelic-10.0.0-cp310-cp310-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:d8bfbbb50ccc39a51a3449cdfb61970d7e61be0eb93336e3725857b7c1d17ff7"},
+    {file = "newrelic-10.0.0-cp310-cp310-manylinux_2_5_x86_64.manylinux1_x86_64.manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:34b60d16d6e8fbc3e65a7d5171718999ecf7bc369cf8baae1bee3c6317972e18"},
+    {file = "newrelic-10.0.0-cp310-cp310-musllinux_1_1_aarch64.whl", hash = "sha256:03a5068d68f22d80797a048a4018d673b8cdd646bc5f9fb63328b53b08bc6de7"},
+    {file = "newrelic-10.0.0-cp310-cp310-musllinux_1_1_x86_64.whl", hash = "sha256:c633972d88d89a2a17471b834961a889709f4970016e9641e3ddc0234669aadf"},
+    {file = "newrelic-10.0.0-cp311-cp311-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:a8a16dfac53914dd0b930a2c087df701585d4f372b2c138466418e78d067b50f"},
+    {file = "newrelic-10.0.0-cp311-cp311-manylinux_2_5_x86_64.manylinux1_x86_64.manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:a8c1b480bbe5c3e2e156f8de86182aa207430dbb32e0e5dc523ba8c3731328fc"},
+    {file = "newrelic-10.0.0-cp311-cp311-musllinux_1_1_aarch64.whl", hash = "sha256:6257413c9e261e8256be5cadb488945dbb3830dcc6091805fa3a5c70992a03a6"},
+    {file = "newrelic-10.0.0-cp311-cp311-musllinux_1_1_x86_64.whl", hash = "sha256:d90d41d78bd72d7fab7ed1cf34bf3dc519ab2d8c6820554061b8708eb7951374"},
+    {file = "newrelic-10.0.0-cp312-cp312-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:002e21527c77c0c9640402c152d40a114b4cc821e7de93cf445fffaef160f1aa"},
+    {file = "newrelic-10.0.0-cp312-cp312-manylinux_2_5_x86_64.manylinux1_x86_64.manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:1f4cd5ca11f08badd4b1cdd746053cfb30a09d5d9b9c1f5d911718d2870b4493"},
+    {file = "newrelic-10.0.0-cp312-cp312-musllinux_1_1_aarch64.whl", hash = "sha256:27d2f34bf714ef9d7ff8a68265a2094b87a4bdc7b1bbbd0a1421cf5cf8f33311"},
+    {file = "newrelic-10.0.0-cp312-cp312-musllinux_1_1_x86_64.whl", hash = "sha256:f1aac4a5fe1d0cbe2bb9e2c52152604fb872a6bce28e129febd29d1d307df1f4"},
+    {file = "newrelic-10.0.0-cp37-cp37m-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:b60407fdb9798eee54488130bf87dfe542c3f04475c0c6b8c14e84274db5b1eb"},
+    {file = "newrelic-10.0.0-cp37-cp37m-manylinux_2_5_x86_64.manylinux1_x86_64.manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:94c94a0a05e2995dff812f4fb85113227bcc5a24635539031842af9c1ddc4368"},
+    {file = "newrelic-10.0.0-cp37-cp37m-musllinux_1_1_aarch64.whl", hash = "sha256:0d1f0c1c54a301ee8f7c4372a8905a18cd36d9a2f9b6550898dd7bac147480d3"},
+    {file = "newrelic-10.0.0-cp37-cp37m-musllinux_1_1_x86_64.whl", hash = "sha256:b1352b6d357e82899ff102acb6971fb9c2cebe70c783081f11c3e53fddfedc4e"},
+    {file = "newrelic-10.0.0-cp38-cp38-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:4d09af04f86d40c534d3753bdc1e45e9ca76ce85cea7ea87994c77b3d0677381"},
+    {file = "newrelic-10.0.0-cp38-cp38-manylinux_2_5_x86_64.manylinux1_x86_64.manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:8716867245ebe97656017e7a6ef17ebccb730e59062531e3e7b9ce9ffc7b4e4b"},
+    {file = "newrelic-10.0.0-cp38-cp38-musllinux_1_1_aarch64.whl", hash = "sha256:14e675e0a73e52fde94df9de89201de945cc3a2a046b4fdfe5ba1717b15cad78"},
+    {file = "newrelic-10.0.0-cp38-cp38-musllinux_1_1_x86_64.whl", hash = "sha256:78bc57206c7747f7096ed081d828719def7c0952ea7834c7769d383bd7ba0aa6"},
+    {file = "newrelic-10.0.0-cp39-cp39-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:bd3c73bbfac0a48402583aada21bf026161df8b73c6552cb8654f4a93f409860"},
+    {file = "newrelic-10.0.0-cp39-cp39-manylinux_2_5_x86_64.manylinux1_x86_64.manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:01e68cf6826a3d456aaa0a4c88a7b864403428369b855c3d9c5c27958ef48adb"},
+    {file = "newrelic-10.0.0-cp39-cp39-musllinux_1_1_aarch64.whl", hash = "sha256:f446bf0943220e114e861bbc96761733e0877684ee860cf61755abe2d9805367"},
+    {file = "newrelic-10.0.0-cp39-cp39-musllinux_1_1_x86_64.whl", hash = "sha256:d6e09a66088431356c6c1a75bd1cdac2e425d547b47026138b254ac51d5df23d"},
+    {file = "newrelic-10.0.0.tar.gz", hash = "sha256:548b538c3e95b589a30565bff668285ca74bb64069eb1d6f643bde9768944f53"},
+]
+
+[package.extras]
+infinite-tracing = ["grpcio", "protobuf"]
+
+[[package]]
 name = "packaging"
 version = "24.1"
 description = "Core utilities for Python packages"
@@ -920,4 +957,4 @@ zstd = ["zstandard (>=0.18.0)"]
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.10,<3.13"
-content-hash = "f2a9c2e8c0865b6a95b47126f813f5061b258091a10dd5cc987300d9582be3a0"
+content-hash = "6339f12093768d88511754b4caaf82f2e1e6ff29bc14a1c3f45a6069aeb2e41a"
