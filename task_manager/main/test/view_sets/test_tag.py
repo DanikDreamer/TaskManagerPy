@@ -1,12 +1,13 @@
 import factory
+from http import HTTPStatus
 
-from base import TestViewSetBase
-from factories import UserFactory, AdminFactory, TagFactory
+from task_manager.main.test.base import TestViewSetBase
+from task_manager.main.test.factories import UserFactory, AdminFactory, TagFactory
 
 
 class TestTagViewSet(TestViewSetBase):
     basename = "tags"
-    user_attributes = UserFactory
+    user_attributes = factory.build(dict, FACTORY_CLASS=UserFactory)
 
     def test_list(self):
         tag = TagFactory()
@@ -37,43 +38,58 @@ class TestTagViewSet(TestViewSetBase):
     def test_delete(self):
         tag = TagFactory()
 
-        self.delete(tag.id)
+        response = self.request_delete(tag.id)
+
+        assert response.status_code == HTTPStatus.FORBIDDEN
 
 
 class TestTagNoAuthViewSet(TestViewSetBase):
     basename = "tags"
     user_attributes = None
 
+    def setUp(self):
+        self.unauthenticate_user()
+
     def test_list(self):
         TagFactory()
 
-        self.list()
+        response = self.request_list()
+
+        assert response.status_code == HTTPStatus.FORBIDDEN
 
     def test_retrieve(self):
         tag = TagFactory()
 
-        self.retrieve(tag.id)
+        response = self.request_retrieve(tag.id)
+
+        assert response.status_code == HTTPStatus.FORBIDDEN
 
     def test_create(self):
         tag_attributes = factory.build(dict, FACTORY_CLASS=TagFactory)
 
-        self.create(tag_attributes)
+        response = self.request_create(tag_attributes)
+
+        assert response.status_code == HTTPStatus.FORBIDDEN
 
     def test_update(self):
         tag = TagFactory()
         new_tag_attributes = factory.build(dict, FACTORY_CLASS=TagFactory)
 
-        self.update(tag.id, new_tag_attributes)
+        response = self.request_update(tag.id, new_tag_attributes)
+
+        assert response.status_code == HTTPStatus.FORBIDDEN
 
     def test_delete(self):
         tag = TagFactory()
 
-        self.delete(tag.id)
+        response = self.request_delete(tag.id)
+
+        assert response.status_code == HTTPStatus.FORBIDDEN
 
 
 class TestAdminOnlyDeleteTagViewSet(TestViewSetBase):
     basename = "tags"
-    user_attributes = AdminFactory
+    user_attributes = factory.build(dict, FACTORY_CLASS=AdminFactory)
 
     def test_delete(self):
         tag = TagFactory()

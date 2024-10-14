@@ -18,10 +18,13 @@ class TestViewSetBase(APITestCase):
         cls.user = cls.create_api_user()
         cls.client = APIClient()
 
+    def setUp(self) -> None:
+        self.client.force_login(self.user)
+
     @classmethod
     def create_api_user(cls) -> User:
         if cls.user_attributes:
-            return cls.user_attributes.create()
+            return User.objects.create(**cls.user_attributes)
 
     @classmethod
     def detail_url(cls, key: Union[int, str]) -> str:
@@ -32,57 +35,52 @@ class TestViewSetBase(APITestCase):
         return reverse(f"{cls.basename}-list", args=args)
 
     @classmethod
-    def assert_details(cls, response_data, expected_data) -> None:
-        for key, value in expected_data.items():
-            assert response_data.get(key) == value
+    def unauthenticate_user(cls) -> None:
+        cls.client.logout()
 
-    def authenticate_user(self) -> None:
-        if self.user:
-            self.client.force_login(self.user)
+    def request_list(
+        self, data: dict = None, args: List[Union[str, int]] = None
+    ) -> dict:
+        response = self.client.get(self.list_url(args), data=data)
+        return response
 
     def list(self, data: dict = None, args: List[Union[str, int]] = None) -> dict:
-        self.authenticate_user()
         response = self.client.get(self.list_url(args), data=data)
-        if self.user:
-            assert response.status_code == HTTPStatus.OK, response.content
-        else:
-            assert response.status_code == HTTPStatus.FORBIDDEN, response.content
-        return response.data
+        assert response.status_code == HTTPStatus.OK, response.content
+        return response.json()
+
+    def request_retrieve(self, key: int) -> dict:
+        response = self.client.get(self.detail_url(key))
+        return response
 
     def retrieve(self, key: int) -> dict:
-        self.authenticate_user()
         response = self.client.get(self.detail_url(key))
-        if self.user:
-            assert response.status_code == HTTPStatus.OK, response.content
-        else:
-            assert response.status_code == HTTPStatus.FORBIDDEN, response.content
-        return response.data
+        assert response.status_code == HTTPStatus.OK, response.content
+        return response.json()
+
+    def request_create(self, data: dict, args: List[Union[str, int]] = None) -> dict:
+        response = self.client.post(self.list_url(args), data=data)
+        return response
 
     def create(self, data: dict, args: List[Union[str, int]] = None) -> dict:
-        self.authenticate_user()
         response = self.client.post(self.list_url(args), data=data)
-        if self.user:
-            self.assert_details(response.data, data)
-            assert response.status_code == HTTPStatus.CREATED, response.content
-        else:
-            assert response.status_code == HTTPStatus.FORBIDDEN, response.content
-        return response.data
+        assert response.status_code == HTTPStatus.CREATED, response.content
+        return response.json()
+
+    def request_update(self, key: int, data: dict) -> dict:
+        response = self.client.put(self.detail_url(key), data=data)
+        return response
 
     def update(self, key: int, data: dict) -> dict:
-        self.authenticate_user()
         response = self.client.put(self.detail_url(key), data=data)
-        if self.user:
-            self.assert_details(response.data, data)
-            assert response.status_code == HTTPStatus.OK, response.content
-        else:
-            assert response.status_code == HTTPStatus.FORBIDDEN, response.content
-        return response.data
+        assert response.status_code == HTTPStatus.OK, response.content
+        return response.json()
+
+    def request_delete(self, key: int) -> dict:
+        response = self.client.delete(self.detail_url(key))
+        return response
 
     def delete(self, key: int) -> dict:
-        self.authenticate_user()
         response = self.client.delete(self.detail_url(key))
-        if self.user and self.user.is_staff:
-            assert response.status_code == HTTPStatus.NO_CONTENT, response.content
-        else:
-            assert response.status_code == HTTPStatus.FORBIDDEN, response.content
+        assert response.status_code == HTTPStatus.NO_CONTENT, response.content
         return response.data
