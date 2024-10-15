@@ -40,7 +40,10 @@ class TestTagViewSet(TestViewSetBase):
         tag = TagFactory()
         new_tag_attributes = factory.build(dict, FACTORY_CLASS=TagFactory)
 
-        self.update(tag.id, new_tag_attributes)
+        updated_tag = self.update(tag.id, new_tag_attributes)
+
+        expected_response = self.expected_details(updated_tag, new_tag_attributes)
+        assert updated_tag == expected_response
 
     def test_delete(self):
         tag = TagFactory()

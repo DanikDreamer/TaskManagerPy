@@ -40,7 +40,10 @@ class TestUserViewSet(TestViewSetBase):
         user = UserFactory()
         new_user_attributes = factory.build(dict, FACTORY_CLASS=UserFactory)
 
-        self.update(user.id, new_user_attributes)
+        updated_user = self.update(user.id, new_user_attributes)
+
+        expected_response = self.expected_details(updated_user, new_user_attributes)
+        assert updated_user == expected_response
 
     def test_delete(self):
         user = UserFactory()

@@ -64,7 +64,10 @@ class TestTaskViewSet(TestViewSetBase):
             tags=[tag.id],
         )
 
-        self.update(task.id, new_task_attributes)
+        updated_task = self.update(task.id, new_task_attributes)
+
+        expected_response = self.expected_details(updated_task, new_task_attributes)
+        assert updated_task == expected_response
 
     def test_delete(self):
         task = TaskFactory()
