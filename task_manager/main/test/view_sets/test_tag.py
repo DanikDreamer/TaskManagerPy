@@ -9,6 +9,10 @@ class TestTagViewSet(TestViewSetBase):
     basename = "tags"
     user_attributes = factory.build(dict, FACTORY_CLASS=UserFactory)
 
+    @staticmethod
+    def expected_details(entity: dict, attributes: dict):
+        return {**attributes, "id": entity["id"]}
+
     def test_list(self):
         tag = TagFactory()
 
@@ -27,7 +31,10 @@ class TestTagViewSet(TestViewSetBase):
     def test_create(self):
         tag_attributes = factory.build(dict, FACTORY_CLASS=TagFactory)
 
-        self.create(tag_attributes)
+        tag = self.create(tag_attributes)
+
+        expected_response = self.expected_details(tag, tag_attributes)
+        assert tag == expected_response
 
     def test_update(self):
         tag = TagFactory()

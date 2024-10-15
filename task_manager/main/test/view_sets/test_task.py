@@ -14,6 +14,10 @@ class TestTaskViewSet(TestViewSetBase):
     basename = "tasks"
     user_attributes = factory.build(dict, FACTORY_CLASS=UserFactory)
 
+    @staticmethod
+    def expected_details(entity: dict, attributes: dict):
+        return {**attributes, "id": entity["id"]}
+
     def test_list(self):
         task = TaskFactory()
 
@@ -42,7 +46,10 @@ class TestTaskViewSet(TestViewSetBase):
             tags=[tag1.id, tag2.id],
         )
 
-        self.create(task_attributes)
+        task = self.create(task_attributes)
+
+        expected_response = self.expected_details(task, task_attributes)
+        assert task == expected_response
 
     def test_update(self):
         author = UserFactory()
