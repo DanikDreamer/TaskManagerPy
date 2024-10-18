@@ -1,5 +1,5 @@
+import random
 import factory
-from datetime import datetime, timedelta
 
 from task_manager.main.models import User
 from task_manager.main.test.factoriess.base import ImageFileProvider
@@ -17,6 +17,7 @@ class UserFactory(factory.django.DjangoModelFactory):
     first_name = factory.LazyAttribute(lambda _: faker.first_name())
     last_name = factory.LazyAttribute(lambda _: faker.last_name())
     email = factory.LazyAttribute(lambda _: faker.email())
+    role = factory.LazyAttribute(lambda _: random.choice(User.Roles.values))
     date_of_birth = factory.LazyAttribute(lambda _: faker.date())
     phone = factory.LazyAttribute(lambda _: faker.phone_number()[:20])
     avatar_picture = factory.LazyAttribute(lambda _: faker.image_file(fmt="jpeg"))
