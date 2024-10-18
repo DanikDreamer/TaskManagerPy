@@ -1,9 +1,12 @@
 import django_filters
+from typing import cast
 from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated
+
 from .models import User, Tag, Task
 from .serializers import UserSerializer, TagSerializer, TaskSerializer
 from .permissions import IsStaffOnlyForDelete
+from .services.single_resource import SingleResourceMixin, SingleResourceUpdateMixin
 
 
 class UserFilter(django_filters.FilterSet):
@@ -32,6 +35,16 @@ class UserViewSet(viewsets.ModelViewSet):
     serializer_class = UserSerializer
     filterset_class = UserFilter
     permission_classes = [IsAuthenticated, IsStaffOnlyForDelete]
+
+
+class CurrentUserViewSet(
+    SingleResourceMixin, SingleResourceUpdateMixin, viewsets.ModelViewSet
+):
+    queryset = User.objects.order_by("id")
+    serializer_class = UserSerializer
+
+    def get_object(self) -> User:
+        return cast(User, self.request.user)
 
 
 class TagViewSet(viewsets.ModelViewSet):

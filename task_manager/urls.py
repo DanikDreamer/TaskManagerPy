@@ -25,12 +25,14 @@ from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
 
 from .main.admin import task_manager_admin_site
-from .main.views import UserViewSet, TagViewSet, TaskViewSet
+from .main.views import UserViewSet, TagViewSet, TaskViewSet, CurrentUserViewSet
+from .main.services.single_resource import BulkRouter
 
-router = routers.SimpleRouter()
+router = BulkRouter()
 router.register(r"users", UserViewSet, basename="users")
 router.register(r"tags", TagViewSet, basename="tags")
 router.register(r"tasks", TaskViewSet, basename="tasks")
+router.register(r"current-user", CurrentUserViewSet, basename="current_user")
 
 schema_view = get_schema_view(
     openapi.Info(
