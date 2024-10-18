@@ -13,13 +13,13 @@ class TestJWTAuth(APITestCase):
     any_api_url = reverse("tasks-list")
 
     @staticmethod
-    def create_user():
-        return UserFactory.create()
+    def create_user(**attributes):
+        return UserFactory.create(**attributes)
 
     def token_request(self, username: str = None, password: str = "password"):
         client = self.client_class()
         if not username:
-            username = self.create_user().username
+            username = self.create_user(password=password).username
         return client.post(
             self.token_url, data={"username": username, "password": password}
         )

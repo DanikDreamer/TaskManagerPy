@@ -1,12 +1,22 @@
 import factory
+from http import HTTPStatus
 
-from base import TestViewSetBase
-from factories import UserFactory, AdminFactory, TagFactory, TaskFactory
+from task_manager.main.test.base import TestViewSetBase
+from task_manager.main.test.factoriess import (
+    UserFactory,
+    AdminFactory,
+    TagFactory,
+    TaskFactory,
+)
 
 
 class TestTaskViewSet(TestViewSetBase):
     basename = "tasks"
-    user_attributes = UserFactory
+    user_attributes = factory.build(dict, FACTORY_CLASS=UserFactory)
+
+    @staticmethod
+    def expected_details(entity: dict, attributes: dict):
+        return {**attributes, "id": entity["id"]}
 
     def test_list(self):
         task = TaskFactory()
@@ -36,7 +46,10 @@ class TestTaskViewSet(TestViewSetBase):
             tags=[tag1.id, tag2.id],
         )
 
-        self.create(task_attributes)
+        task = self.create(task_attributes)
+
+        expected_response = self.expected_details(task, task_attributes)
+        assert task == expected_response
 
     def test_update(self):
         author = UserFactory()
@@ -51,27 +64,39 @@ class TestTaskViewSet(TestViewSetBase):
             tags=[tag.id],
         )
 
-        self.update(task.id, new_task_attributes)
+        updated_task = self.update(task.id, new_task_attributes)
+
+        expected_response = self.expected_details(updated_task, new_task_attributes)
+        assert updated_task == expected_response
 
     def test_delete(self):
         task = TaskFactory()
 
-        self.delete(task.id)
+        response = self.request_delete(task.id)
+
+        assert response.status_code == HTTPStatus.FORBIDDEN
 
 
 class TestTaskNoAuthViewSet(TestViewSetBase):
     basename = "tasks"
     user_attributes = None
 
+    def setUp(self):
+        self.unauthenticate_user()
+
     def test_list(self):
         TaskFactory()
 
-        self.list()
+        response = self.request_list()
+
+        assert response.status_code == HTTPStatus.FORBIDDEN
 
     def test_retrieve(self):
         task = TaskFactory()
 
-        self.retrieve(task.id)
+        response = self.request_retrieve(task.id)
+
+        assert response.status_code == HTTPStatus.FORBIDDEN
 
     def test_create(self):
         author = UserFactory()
@@ -86,7 +111,9 @@ class TestTaskNoAuthViewSet(TestViewSetBase):
             tags=[tag1.id, tag2.id],
         )
 
-        self.create(task_attributes)
+        response = self.request_create(task_attributes)
+
+        assert response.status_code == HTTPStatus.FORBIDDEN
 
     def test_update(self):
         author = UserFactory()
@@ -101,17 +128,21 @@ class TestTaskNoAuthViewSet(TestViewSetBase):
             tags=[tag.id],
         )
 
-        self.update(task.id, new_task_attributes)
+        response = self.request_update(task.id, new_task_attributes)
+
+        assert response.status_code == HTTPStatus.FORBIDDEN
 
     def test_delete(self):
         task = TaskFactory()
 
-        self.delete(task.id)
+        response = self.request_delete(task.id)
+
+        assert response.status_code == HTTPStatus.FORBIDDEN
 
 
 class TestAdminOnlyDeleteTaskViewSet(TestViewSetBase):
     basename = "tasks"
-    user_attributes = AdminFactory
+    user_attributes = factory.build(dict, FACTORY_CLASS=AdminFactory)
 
     def test_delete(self):
         task = TaskFactory()

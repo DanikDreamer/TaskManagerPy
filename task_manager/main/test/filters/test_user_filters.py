@@ -1,10 +1,12 @@
+import factory
+
 from task_manager.main.test.base import TestViewSetBase
-from task_manager.main.test.factories import UserFactory
+from task_manager.main.test.factoriess import UserFactory
 
 
 class TestUserFilterSet(TestViewSetBase):
     basename = "users"
-    user_attributes = UserFactory
+    user_attributes = factory.build(dict, FACTORY_CLASS=UserFactory)
 
     def test_username_field_filter(self):
         user1 = UserFactory()

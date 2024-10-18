@@ -1,3 +1,4 @@
+import factory
 from unittest.mock import patch, MagicMock
 
 from django.core import mail
@@ -6,11 +7,11 @@ from django.template.loader import render_to_string
 from task_manager.main.models import Task
 from task_manager.main.services.mail import send_assign_notification
 from task_manager.main.test.base import TestViewSetBase
-from task_manager.main.test.factories import UserFactory
+from task_manager.main.test.factoriess import UserFactory
 
 
 class TestSendEmail(TestViewSetBase):
-    user_attributes = UserFactory
+    user_attributes = factory.build(dict, FACTORY_CLASS=UserFactory)
 
     @patch.object(mail, "send_mail")
     def test_send_assign_notification(self, fake_sender: MagicMock) -> None:
