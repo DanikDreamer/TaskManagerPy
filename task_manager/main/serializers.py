@@ -47,7 +47,9 @@ class TagSerializer(serializers.ModelSerializer):
 
 class TaskSerializer(serializers.ModelSerializer):
     author = serializers.PrimaryKeyRelatedField(queryset=User.objects.all())
-    assignee = serializers.PrimaryKeyRelatedField(queryset=User.objects.all())
+    assignee = serializers.PrimaryKeyRelatedField(
+        queryset=User.objects.all(), required=False
+    )
     tags = serializers.PrimaryKeyRelatedField(queryset=Tag.objects.all(), many=True)
     state = serializers.ChoiceField(choices=Task.States.choices)
     priority = serializers.ChoiceField(choices=Task.PriorityLevels.choices)
