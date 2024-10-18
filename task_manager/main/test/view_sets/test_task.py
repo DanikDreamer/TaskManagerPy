@@ -29,7 +29,7 @@ class TestTaskViewSet(TestViewSetBase):
     def test_retrieve(self):
         task = TaskFactory()
 
-        response = self.retrieve(task.id)
+        response = self.retrieve([task.id])
 
         assert task.title == response["title"]
 
@@ -64,7 +64,7 @@ class TestTaskViewSet(TestViewSetBase):
             tags=[tag.id],
         )
 
-        updated_task = self.update(task.id, new_task_attributes)
+        updated_task = self.update([task.id], new_task_attributes)
 
         expected_response = self.expected_details(updated_task, new_task_attributes)
         assert updated_task == expected_response
@@ -72,7 +72,7 @@ class TestTaskViewSet(TestViewSetBase):
     def test_delete(self):
         task = TaskFactory()
 
-        response = self.request_delete(task.id)
+        response = self.request_delete([task.id])
 
         assert response.status_code == HTTPStatus.FORBIDDEN
 
@@ -94,7 +94,7 @@ class TestTaskNoAuthViewSet(TestViewSetBase):
     def test_retrieve(self):
         task = TaskFactory()
 
-        response = self.request_retrieve(task.id)
+        response = self.request_retrieve([task.id])
 
         assert response.status_code == HTTPStatus.FORBIDDEN
 
@@ -128,14 +128,14 @@ class TestTaskNoAuthViewSet(TestViewSetBase):
             tags=[tag.id],
         )
 
-        response = self.request_update(task.id, new_task_attributes)
+        response = self.request_update([task.id], new_task_attributes)
 
         assert response.status_code == HTTPStatus.FORBIDDEN
 
     def test_delete(self):
         task = TaskFactory()
 
-        response = self.request_delete(task.id)
+        response = self.request_delete([task.id])
 
         assert response.status_code == HTTPStatus.FORBIDDEN
 
@@ -147,4 +147,4 @@ class TestAdminOnlyDeleteTaskViewSet(TestViewSetBase):
     def test_delete(self):
         task = TaskFactory()
 
-        self.delete(task.id)
+        self.delete([task.id])

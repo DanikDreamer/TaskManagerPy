@@ -18,8 +18,6 @@ class TaskFactory(factory.django.DjangoModelFactory):
     expired_at = factory.LazyAttribute(
         lambda _: (datetime.now() + timedelta(days=5)).strftime("%Y-%m-%d")
     )
-    author = factory.SubFactory(UserFactory)
-    assignee = factory.SubFactory(UserFactory)
     state = factory.LazyAttribute(lambda _: random.choice(Task.States.values))
     priority = factory.LazyAttribute(
         lambda _: random.choice(Task.PriorityLevels.values)

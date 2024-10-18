@@ -29,7 +29,7 @@ class TestUserViewSet(TestViewSetBase):
     def test_retrieve(self):
         user = UserFactory()
 
-        response = self.retrieve(user.id)
+        response = self.retrieve([user.id])
 
         assert user.username == response["username"]
 
@@ -45,7 +45,7 @@ class TestUserViewSet(TestViewSetBase):
         user = UserFactory()
         new_user_attributes = factory.build(dict, FACTORY_CLASS=UserFactory)
 
-        updated_user = self.update(user.id, new_user_attributes)
+        updated_user = self.update([user.id], new_user_attributes)
 
         expected_response = self.expected_details(updated_user, new_user_attributes)
         expected_response["avatar_picture"] = updated_user["avatar_picture"]
@@ -54,7 +54,7 @@ class TestUserViewSet(TestViewSetBase):
     def test_delete(self):
         user = UserFactory()
 
-        response = self.request_delete(user.id)
+        response = self.request_delete([user.id])
 
         assert response.status_code == HTTPStatus.FORBIDDEN
 
@@ -97,7 +97,7 @@ class TestUserNoAuthViewSet(TestViewSetBase):
     def test_retrieve(self):
         user = UserFactory()
 
-        response = self.request_retrieve(user.id)
+        response = self.request_retrieve([user.id])
 
         assert response.status_code == HTTPStatus.FORBIDDEN
 
@@ -112,14 +112,14 @@ class TestUserNoAuthViewSet(TestViewSetBase):
         user = UserFactory()
         new_user_attributes = factory.build(dict, FACTORY_CLASS=UserFactory)
 
-        response = self.request_update(user.id, new_user_attributes)
+        response = self.request_update([user.id], new_user_attributes)
 
         assert response.status_code == HTTPStatus.FORBIDDEN
 
     def test_delete(self):
         user = UserFactory()
 
-        response = self.request_delete(user.id)
+        response = self.request_delete([user.id])
 
         assert response.status_code == HTTPStatus.FORBIDDEN
 
@@ -131,4 +131,4 @@ class TestAdminOnlyDeleteUserViewSet(TestViewSetBase):
     def test_delete(self):
         user = UserFactory()
 
-        self.delete(user.id)
+        self.delete([user.id])

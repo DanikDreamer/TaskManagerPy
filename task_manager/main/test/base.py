@@ -34,13 +34,21 @@ class ActionClient:
         return self.api_client.post(url, data=attributes)
 
     def create_task(self, **attributes) -> dict:
-        user = UserFactory()
-        tag = TagFactory()
         task_attributes = factory.build(
-            dict, FACTORY_CLASS=TaskFactory, author=user.id, tags=[tag.id]
+            dict, FACTORY_CLASS=TaskFactory, author=self.user.id
         )
         task_attributes.update(attributes)
         response = self.request_create_task(**task_attributes)
+        assert response.status_code == HTTPStatus.CREATED, response.content
+        return response.data
+
+    def request_create_tag(self, **attributes) -> Response:
+        url = reverse("tags-list")
+        return self.api_client.post(url, data=attributes)
+
+    def create_tag(self, **attributes) -> dict:
+        tag_attributes = factory.build(dict, FACTORY_CLASS=TagFactory)
+        response = self.request_create_tag(**tag_attributes)
         assert response.status_code == HTTPStatus.CREATED, response.content
         return response.data
 
@@ -68,8 +76,8 @@ class TestViewSetBase(APITestCase):
             return User.objects.create(**cls.user_attributes)
 
     @classmethod
-    def detail_url(cls, key: Union[int, str]) -> str:
-        return reverse(f"{cls.basename}-detail", args=[key])
+    def detail_url(cls, keys: List[int]) -> str:
+        return reverse(f"{cls.basename}-detail", args=keys)
 
     @classmethod
     def list_url(cls, args: List[Union[str, int]] = None) -> str:
@@ -90,12 +98,12 @@ class TestViewSetBase(APITestCase):
         assert response.status_code == HTTPStatus.OK, response.content
         return response.json()
 
-    def request_retrieve(self, key: int) -> dict:
-        response = self.client.get(self.detail_url(key))
+    def request_retrieve(self, keys: List[int]) -> dict:
+        response = self.client.get(self.detail_url(keys))
         return response
 
-    def retrieve(self, key: int) -> dict:
-        response = self.client.get(self.detail_url(key))
+    def retrieve(self, keys: List[int]) -> dict:
+        response = self.client.get(self.detail_url(keys))
         assert response.status_code == HTTPStatus.OK, response.content
         return response.json()
 
@@ -108,21 +116,21 @@ class TestViewSetBase(APITestCase):
         assert response.status_code == HTTPStatus.CREATED, response.content
         return response.json()
 
-    def request_update(self, key: int, data: dict) -> dict:
-        response = self.client.put(self.detail_url(key), data=data)
+    def request_update(self, keys: List[int], data: dict) -> dict:
+        response = self.client.put(self.detail_url(keys), data=data)
         return response
 
-    def update(self, key: int, data: dict) -> dict:
-        response = self.client.put(self.detail_url(key), data=data)
+    def update(self, keys: List[int], data: dict) -> dict:
+        response = self.client.put(self.detail_url(keys), data=data)
         assert response.status_code == HTTPStatus.OK, response.content
         return response.json()
 
-    def request_delete(self, key: int) -> dict:
-        response = self.client.delete(self.detail_url(key))
+    def request_delete(self, keys: List[int]) -> dict:
+        response = self.client.delete(self.detail_url(keys))
         return response
 
-    def delete(self, key: int) -> dict:
-        response = self.client.delete(self.detail_url(key))
+    def delete(self, keys: List[int]) -> dict:
+        response = self.client.delete(self.detail_url(keys))
         assert response.status_code == HTTPStatus.NO_CONTENT, response.content
         return response.data
 

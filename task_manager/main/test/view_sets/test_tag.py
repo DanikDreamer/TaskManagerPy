@@ -24,7 +24,7 @@ class TestTagViewSet(TestViewSetBase):
     def test_retrieve(self):
         tag = TagFactory()
 
-        response = self.retrieve(tag.id)
+        response = self.retrieve([tag.id])
 
         assert tag.title == response["title"]
 
@@ -40,7 +40,7 @@ class TestTagViewSet(TestViewSetBase):
         tag = TagFactory()
         new_tag_attributes = factory.build(dict, FACTORY_CLASS=TagFactory)
 
-        updated_tag = self.update(tag.id, new_tag_attributes)
+        updated_tag = self.update([tag.id], new_tag_attributes)
 
         expected_response = self.expected_details(updated_tag, new_tag_attributes)
         assert updated_tag == expected_response
@@ -48,7 +48,7 @@ class TestTagViewSet(TestViewSetBase):
     def test_delete(self):
         tag = TagFactory()
 
-        response = self.request_delete(tag.id)
+        response = self.request_delete([tag.id])
 
         assert response.status_code == HTTPStatus.FORBIDDEN
 
@@ -70,7 +70,7 @@ class TestTagNoAuthViewSet(TestViewSetBase):
     def test_retrieve(self):
         tag = TagFactory()
 
-        response = self.request_retrieve(tag.id)
+        response = self.request_retrieve([tag.id])
 
         assert response.status_code == HTTPStatus.FORBIDDEN
 
@@ -85,14 +85,14 @@ class TestTagNoAuthViewSet(TestViewSetBase):
         tag = TagFactory()
         new_tag_attributes = factory.build(dict, FACTORY_CLASS=TagFactory)
 
-        response = self.request_update(tag.id, new_tag_attributes)
+        response = self.request_update([tag.id], new_tag_attributes)
 
         assert response.status_code == HTTPStatus.FORBIDDEN
 
     def test_delete(self):
         tag = TagFactory()
 
-        response = self.request_delete(tag.id)
+        response = self.request_delete([tag.id])
 
         assert response.status_code == HTTPStatus.FORBIDDEN
 
@@ -104,4 +104,4 @@ class TestAdminOnlyDeleteTagViewSet(TestViewSetBase):
     def test_delete(self):
         tag = TagFactory()
 
-        self.delete(tag.id)
+        self.delete([tag.id])
