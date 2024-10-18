@@ -4,6 +4,7 @@ from typing import Any, List, TYPE_CHECKING
 from rest_framework import routers, viewsets
 from rest_framework.response import Response
 from rest_framework.request import Request
+from rest_framework_extensions.routers import ExtendedSimpleRouter
 
 if TYPE_CHECKING:
     BaseViewMixinBaseClass = viewsets.GenericViewSet
@@ -36,7 +37,7 @@ class SingleResourceUpdateMixin(BaseViewMixinBaseClass):
         return self.bulk_update(request, *args, **kwargs)
 
 
-class BulkRouter(routers.SimpleRouter):
+class BulkRouter(ExtendedSimpleRouter):
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         super().__init__(*args, **kwargs)
 
