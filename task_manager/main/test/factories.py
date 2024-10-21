@@ -10,6 +10,7 @@ faker = Faker()
 class UserFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = User
+        skip_postgeneration_save = True
 
     username = factory.LazyAttribute(lambda _: faker.unique.user_name())
     first_name = factory.LazyAttribute(lambda _: faker.first_name())
@@ -17,12 +18,13 @@ class UserFactory(factory.django.DjangoModelFactory):
     email = factory.LazyAttribute(lambda _: faker.email())
     date_of_birth = factory.LazyAttribute(lambda _: faker.date())
     phone = factory.LazyAttribute(lambda _: faker.phone_number()[:20])
-    password = factory.PostGenerationMethodCall("set_password", "password")
 
-    @classmethod
-    def _after_postgeneration(cls, obj, create, results=None):
-        if create:
-            obj.save()
+    @factory.post_generation
+    def password(obj, create, extracted):
+        if not create:
+            return
+        obj.set_password(extracted)
+        obj.save()
 
 
 class AdminFactory(factory.django.DjangoModelFactory):
@@ -51,6 +53,8 @@ class TaskFactory(factory.django.DjangoModelFactory):
 
     title = factory.LazyAttribute(lambda _: faker.sentence()[:55])
     description = factory.LazyAttribute(lambda _: faker.text())
+    created_at = factory.LazyAttribute(lambda _: datetime.now().strftime("%Y-%m-%d"))
+    updated_at = factory.LazyAttribute(lambda _: datetime.now().strftime("%Y-%m-%d"))
     expired_at = factory.LazyAttribute(
         lambda _: (datetime.now() + timedelta(days=5)).strftime("%Y-%m-%d")
     )
