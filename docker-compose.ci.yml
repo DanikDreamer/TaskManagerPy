@@ -19,8 +19,9 @@ services:
       context: .
       target: base
     environment:
-      <<: *app-config
-      <<: *db-config
+      <<: 
+        - *app-config
+        - *db-config
     depends_on:
       - db
     ports:
@@ -29,7 +30,7 @@ services:
     tty: true
 
   db:
-    image: postgres:12.5-alpine
+    image: postgres:16.4
     environment: *db-config
     logging:
       driver: none
