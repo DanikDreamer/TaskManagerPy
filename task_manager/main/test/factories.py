@@ -17,7 +17,7 @@ class UserFactory(factory.django.DjangoModelFactory):
     last_name = factory.LazyAttribute(lambda _: faker.last_name())
     email = factory.LazyAttribute(lambda _: faker.email())
     date_of_birth = factory.LazyAttribute(lambda _: faker.date())
-    phone = factory.LazyAttribute(lambda _: faker.phone_number()[:15])
+    phone = factory.LazyAttribute(lambda _: faker.phone_number()[:20])
 
 
 class AdminFactory(factory.django.DjangoModelFactory):
