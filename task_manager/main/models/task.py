@@ -45,3 +45,6 @@ class Task(models.Model):
     priority = models.IntegerField(
         default=PriorityLevels.MEDIUM, choices=PriorityLevels.choices
     )
+
+    def __str__(self):
+        return f"Task(title={self.title})"

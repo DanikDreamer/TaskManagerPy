@@ -1,3 +1,4 @@
+import random
 import factory
 from faker import Faker
 from datetime import datetime, timedelta
@@ -45,10 +46,14 @@ class TaskFactory(factory.django.DjangoModelFactory):
 
     title = factory.LazyAttribute(lambda _: faker.sentence()[:55])
     description = factory.LazyAttribute(lambda _: faker.text())
+    created_at = factory.LazyAttribute(lambda _: datetime.now().strftime("%Y-%m-%d"))
+    updated_at = factory.LazyAttribute(lambda _: datetime.now().strftime("%Y-%m-%d"))
     expired_at = factory.LazyAttribute(
         lambda _: (datetime.now() + timedelta(days=5)).strftime("%Y-%m-%d")
     )
     author = factory.SubFactory(UserFactory)
     assignee = factory.SubFactory(UserFactory)
-    state = factory.Iterator(Task.States)
-    priority = factory.Iterator(Task.PriorityLevels)
+    state = factory.LazyAttribute(lambda _: random.choice(Task.States.values))
+    priority = factory.LazyAttribute(
+        lambda _: random.choice(Task.PriorityLevels.values)
+    )
