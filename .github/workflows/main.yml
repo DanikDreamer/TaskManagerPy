@@ -18,3 +18,7 @@ jobs:
           COVERAGE: true
           DJANGO_ENV: test
         run: docker compose --file docker-compose.ci.yml run --rm api make test
+      - name: Send coverage to Coveralls
+        env:
+          COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}
+        run: docker compose --file docker-compose.ci.yml run --rm api coveralls
