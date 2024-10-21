@@ -15,6 +15,8 @@ x-db-config: &db-config
 
 services:
   api:
+    volumes:
+      - ./coverage:/app/coverage
     image: userapp_api
     build:
       context: .
