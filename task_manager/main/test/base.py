@@ -1,15 +1,50 @@
+import factory
 from http import HTTPStatus
 from typing import List, Union
 
 from django.urls import reverse
 from rest_framework.test import APIClient, APITestCase
+from rest_framework.response import Response
 
 from task_manager.main.models import User
+from task_manager.main.test.factories import UserFactory, TaskFactory
+
+
+class ActionClient:
+    def __init__(self, api_client: APIClient, user: User) -> None:
+        self.api_client = api_client
+        self.user = user
+        if self.user:
+            self.api_client.force_login(self.user)
+
+    def request_create_user(self, **data) -> Response:
+        url = reverse("users-list")
+        return self.api_client.post(url, data=data)
+
+    def create_user(self) -> dict:
+        user_attributes = factory.build(dict, FACTORY_CLASS=UserFactory)
+        response = self.request_create_user(**user_attributes)
+        assert response.status_code == HTTPStatus.CREATED, response.content
+        return response.data
+
+    def request_create_task(self, **data) -> Response:
+        url = reverse("tasks-list")
+        return self.api_client.post(url, data=data)
+
+    def create_task(self, **data) -> dict:
+        task_attributes = factory.build(
+            dict, FACTORY_CLASS=TaskFactory, author=self.user.id
+        )
+        task_attributes.update(data)
+        response = self.request_create_task(**task_attributes)
+        assert response.status_code == HTTPStatus.CREATED, response.content
+        return response.data
 
 
 class TestViewSetBase(APITestCase):
     user: User = None
     client: APIClient = None
+    action_client: ActionClient = None
     basename: str
 
     @classmethod
@@ -17,6 +52,7 @@ class TestViewSetBase(APITestCase):
         super().setUpTestData()
         cls.user = cls.create_api_user()
         cls.client = APIClient()
+        cls.action_client = ActionClient(cls.client, cls.user)
 
     def setUp(self) -> None:
         self.client.force_login(self.user)
