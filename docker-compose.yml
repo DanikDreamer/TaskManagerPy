@@ -19,7 +19,14 @@ services:
       DATABASE_PASSWORD: postgres
       DATABASE_HOST: db
       DATABASE_PORT: 5432
-    command: python manage.py runserver 0.0.0.0:8000
+      EMAIL_HOST: ${EMAIL_HOST}
+      EMAIL_HOST_USER: ${EMAIL_HOST_USER}
+      EMAIL_HOST_PASSWORD: ${EMAIL_HOST_PASSWORD}
+      EMAIL_PORT: ${EMAIL_PORT}
+      DEFAULT_FROM_EMAIL: ${DEFAULT_FROM_EMAIL}
+      NEW_RELIC_CONFIG_FILE: newrelic.ini
+    env_file: .env
+    command: newrelic-admin run-program python manage.py runserver 0.0.0.0:8000
 
   db:
     image: postgres:16.4
