@@ -1,11 +1,11 @@
-import random
 import factory
-from faker import Faker
-from datetime import datetime, timedelta
+import random
 
-from task_manager.main.models import User, Tag, Task
+from task_manager.main.models import User
+from task_manager.main.test.factories.base import faker, ImageFileProvider
 
-faker = Faker()
+
+faker.add_provider(ImageFileProvider)
 
 
 class UserFactory(factory.django.DjangoModelFactory):
@@ -17,8 +17,10 @@ class UserFactory(factory.django.DjangoModelFactory):
     first_name = factory.LazyAttribute(lambda _: faker.first_name())
     last_name = factory.LazyAttribute(lambda _: faker.last_name())
     email = factory.LazyAttribute(lambda _: faker.email())
+    role = factory.LazyAttribute(lambda _: random.choice(User.Roles.values))
     date_of_birth = factory.LazyAttribute(lambda _: faker.date())
     phone = factory.LazyAttribute(lambda _: faker.phone_number()[:20])
+    avatar_picture = factory.LazyAttribute(lambda _: faker.image_file(fmt="jpeg"))
 
     @factory.post_generation
     def password(obj, create, extracted):
@@ -39,29 +41,3 @@ class AdminFactory(factory.django.DjangoModelFactory):
     date_of_birth = factory.LazyAttribute(lambda _: faker.date())
     phone = factory.LazyAttribute(lambda _: faker.phone_number()[:15])
     is_staff = True
-
-
-class TagFactory(factory.django.DjangoModelFactory):
-    class Meta:
-        model = Tag
-
-    title = factory.LazyAttribute(lambda _: faker.sentence()[:55])
-
-
-class TaskFactory(factory.django.DjangoModelFactory):
-    class Meta:
-        model = Task
-
-    title = factory.LazyAttribute(lambda _: faker.sentence()[:55])
-    description = factory.LazyAttribute(lambda _: faker.text())
-    created_at = factory.LazyAttribute(lambda _: datetime.now().strftime("%Y-%m-%d"))
-    updated_at = factory.LazyAttribute(lambda _: datetime.now().strftime("%Y-%m-%d"))
-    expired_at = factory.LazyAttribute(
-        lambda _: (datetime.now() + timedelta(days=5)).strftime("%Y-%m-%d")
-    )
-    author = factory.SubFactory(UserFactory)
-    assignee = factory.SubFactory(UserFactory)
-    state = factory.LazyAttribute(lambda _: random.choice(Task.States.values))
-    priority = factory.LazyAttribute(
-        lambda _: random.choice(Task.PriorityLevels.values)
-    )
